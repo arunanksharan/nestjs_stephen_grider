@@ -1,40 +1,33 @@
 import { Injectable } from '@nestjs/common';
-
-const messages = [
-  {
-    id: 1,
-    text: 'First message',
-  },
-  {
-    id: 2,
-    text: 'Second message',
-  },
-  {
-    id: 3,
-    text: 'Third message',
-  },
-];
+import { MessagesRepository } from './messages.repository';
 
 @Injectable()
 export class MessagesService {
-  listMessages() {
-    return messages;
+  messagesRepo: MessagesRepository;
+  constructor() {
+    this.messagesRepo = new MessagesRepository();
+  }
+  //   constructor(private messagesRepository: MessagesRepository) {}
+  async findAll() {
+    return this.messagesRepo.findAll();
   }
 
-  createMessage(content: string, userId: number) {
+  async findOne(id: string) {
+    // return messages.find((message) => message.id === +id);
+    return this.messagesRepo.findOne(id);
+  }
+
+  create(content: string, userId: number) {
     console.log(`createMessage() text: ${content} :: userId: ${userId}`);
-    return { content, userId };
+    return this.messagesRepo.create(content, userId);
+    // return { content, userId };
   }
 
-  updateMessage() {
+  update() {
     return 'Update message';
   }
 
-  deleteMessage() {
+  delete() {
     return 'Delete message';
-  }
-
-  getMessage(id: string) {
-    return messages.find((message) => message.id === +id);
   }
 }

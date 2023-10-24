@@ -1,0 +1,7 @@
+{
+  "1": { "content": "message 1", "userId": 1 },
+  "2": { "content": "message 2", "userId": 2 },
+  "41": { "id": 41, "content": "Sample Message2", "userId": 10 },
+  "285": { "id": 285, "content": "Sample Message2", "userId": 10 },
+  "379": { "id": 379, "content": "Sample Message2", "userId": 10 }
+}
