@@ -1,4 +1,12 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import { MessagesService } from './messages.service';
 
 @Controller('messages')
-export class MessagesController {}
+export class MessagesController {
+  constructor(private readonly messagesService: MessagesService) {}
+
+  @Get('list')
+  listMessages() {
+    return this.messagesService.listMessages();
+  }
+}
