@@ -21,9 +21,9 @@ export class MessagesService {
     return messages;
   }
 
-  createMessage(text: string) {
-    console.log(`createMessage() text: ${text}`);
-    return text;
+  createMessage(content: string, userId: number) {
+    console.log(`createMessage() text: ${content} :: userId: ${userId}`);
+    return { content, userId };
   }
 
   updateMessage() {
