@@ -9,6 +9,7 @@ import {
   Delete,
   NotFoundException,
   Session,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
@@ -16,9 +17,13 @@ import { UsersService } from './users.service';
 import { AuthService } from './auth.service';
 import { Serialize } from '../interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
+import { CurrentUser } from './decorators/current-user.decorator';
+import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
+import { UserEntity } from './users.entity';
 
 @Controller('auth')
 @Serialize(UserDto)
+@UseInterceptors(CurrentUserInterceptor)
 export class UsersController {
   constructor(
     private usersService: UsersService,
@@ -31,23 +36,46 @@ export class UsersController {
     console.log(`Inside setColor: session color is: ${session.color}`);
     return color;
   }
-
   @Get('/colors')
   getColor(@Session() session: any) {
     console.log('Inside getColor');
     console.log(`session color is: ${session.color}`);
     return session.color;
   }
+
+  // @Get('/whoami')
+  // whoami(@Session() session: any) {
+  //   console.log(session);
+  //   return this.usersService.findOne(session.userId);
+  // }
+
+  @Get('/whoami')
+  whoami(@CurrentUser() user: UserEntity) {
+    return user;
+  }
+
   @Post('/signup')
-  createUser(@Body() body: CreateUserDto) {
+  async createUser(@Body() body: CreateUserDto, @Session() session: any) {
     console.log(body);
-    return this.authService.signup(body.email, body.password);
+    const user = await this.authService.signup(body.email, body.password);
+    session.userId = user.id;
+    return user;
   }
 
   @Post('/signin')
-  signin(@Body() body: CreateUserDto) {
+  async signin(@Body() body: CreateUserDto, @Session() session: any) {
     console.log(body);
-    return this.authService.signin(body.email, body.password);
+    const user = await this.authService.signin(body.email, body.password);
+    session.userId = user.id;
+    console.log(`inside signin after fetching user`);
+    console.log(session);
+    return user;
+  }
+
+  @Post('/signout')
+  signout(@Session() session: any) {
+    session.userId = null;
+    console.log(session);
   }
 
   @Get('/:id')
