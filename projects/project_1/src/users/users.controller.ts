@@ -8,6 +8,7 @@ import {
   Query,
   Delete,
   NotFoundException,
+  Session,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
@@ -24,6 +25,19 @@ export class UsersController {
     private authService: AuthService,
   ) {}
 
+  @Get('/colors/:color')
+  setColor(@Param('color') color: string, @Session() session: any) {
+    session.color = color;
+    console.log(`Inside setColor: session color is: ${session.color}`);
+    return color;
+  }
+
+  @Get('/colors')
+  getColor(@Session() session: any) {
+    console.log('Inside getColor');
+    console.log(`session color is: ${session.color}`);
+    return session.color;
+  }
   @Post('/signup')
   createUser(@Body() body: CreateUserDto) {
     console.log(body);
