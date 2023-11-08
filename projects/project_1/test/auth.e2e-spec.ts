@@ -4,7 +4,7 @@ import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { setupApp } from './../src/setup-app';
 
-describe('AppController (e2e)', () => {
+describe('Authentication System (e2e)', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
@@ -17,10 +17,16 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  it('Handles a signup request', () => {
+    const signUpEmail = 'arunanksharan2@gmail.com';
     return request(app.getHttpServer())
-      .get('/app/hello')
-      .expect(200)
-      .expect('Hello World!');
+      .post('/auth/signup')
+      .send({ email: signUpEmail, password: '12345678' })
+      .expect(201)
+      .then((res) => {
+        const { id, email } = res.body;
+        expect(id).toBeDefined();
+        expect(email).toEqual(signUpEmail);
+      });
   });
 });
