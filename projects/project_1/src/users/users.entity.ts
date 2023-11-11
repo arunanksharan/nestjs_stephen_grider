@@ -1,3 +1,5 @@
+import { IsBoolean } from 'class-validator';
+import { ReportEntity } from 'src/reports/reports.entity';
 import {
   AfterInsert,
   Entity,
@@ -5,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   AfterUpdate,
   AfterRemove,
+  OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -17,6 +20,12 @@ export class UserEntity {
 
   @Column()
   password: string;
+
+  @Column({ default: true })
+  isAdmin: boolean;
+
+  @OneToMany(() => ReportEntity, (report) => report.user)
+  reports: ReportEntity[];
 
   @AfterInsert()
   logInsert() {

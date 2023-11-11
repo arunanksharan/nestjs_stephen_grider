@@ -1,0 +1,54 @@
+### Auth SignUp
+
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+
+{
+    "email": "arunankauthwithcookie@gmail.com",
+    "password": "12345678"
+}
+
+### Auth SignIn
+POST http://localhost:3000/auth/signin
+Content-Type: application/json
+
+{
+    "email": "arunankauthwithcookie@gmail.com",
+    "password": "12345678"
+}
+
+### Auth SignOut
+POST http://localhost:3000/auth/signout
+Content-Type: application/json
+
+### WhoAmI
+GET http://localhost:3000/auth/whoami
+
+### Report Creation
+
+# POST /reports/create HTTP/1.1
+POST http://localhost:3000/reports/create
+Host: localhost:3000
+Content-Type: application/json
+
+{
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": 2000,
+    "mileage": 80000,
+    "lng": 80,
+    "lat": 20,
+    "price": 10000,
+    "name": "Toyota Corolla 2000"
+}
+
+### Approve a report
+PATCH http://localhost:3000/reports/4
+Content-Type: application/json
+
+{
+    "approved": true
+}
+
+### Get an estimate of price for a car
+GET http://localhost:3000/reports/estimate?make=Toyota&model=Corolla&year=2000&mileage=75000&lat=21&lng=77
